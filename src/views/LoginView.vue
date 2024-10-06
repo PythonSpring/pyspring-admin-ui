@@ -5,9 +5,9 @@
                 <p class="text-sm text-gray-600 mt-1">請登入您的帳戶</p>
             </div>
             <el-form :model="form" :rules="rules" ref="loginForm" @submit.prevent="onSubmit" class="space-y-4">
-                <el-form-item prop="username">
+                <el-form-item prop="email">
                   <el-input 
-                  v-model="form.username" 
+                  v-model="form.email" 
                   placeholder="用戶名"
                   prefix-icon="el-icon-user"
                   class="w-full">
@@ -35,46 +35,44 @@
     </div>
   </template>
   
-  <script setup>
-  import { ref, reactive } from 'vue'
-  import { ElMessage } from 'element-plus'
+<script setup>
+    import { ref } from 'vue'
+    import { ElMessage } from 'element-plus'
+    import { login } from '@/composables/apis'
+
+    const loginForm = ref(null)
+    const form = ref({
+      email: '',
+      password: ''
+    })
   
-      const loginForm = ref(null)
-      const form = reactive({
-        username: '',
-        password: ''
-      })
+    const rules = {
+      email: [
+        { required: true, message: '請輸入用戶名', trigger: 'blur' }
+      ],
+      password: [
+        { required: true, message: '請輸入密碼', trigger: 'blur' }
+      ]
+    }
   
-      const rules = {
-        username: [
-          { required: true, message: '請輸入用戶名', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '請輸入密碼', trigger: 'blur' }
-        ]
-      }
-  
-      const onSubmit = () => {
-        loginForm.value.validate((valid) => {
-          if (valid) {
-            // 這裡處理登入邏輯
+    const onSubmit = () => {
+      loginForm.value.validate(async(valid) => {
+        if (valid) {
+          try {
+            const res = await login(form.value)
+            console.log(loginForm.value)
+            console.log(form.value)
+            console.log(res)
             ElMessage.success('登入成功!')
-            // 登入成功後可以進行路由跳轉等操作
-          } else {
-            ElMessage.error('請正確填寫登入信息')
+          } catch (error) {
+            console.log(error)
           }
-        })
-      }
+          
+          // 登入成功後可以進行路由跳轉等操作
+        } else {
+          ElMessage.error('請正確填寫登入信息')
+        }
+      })
+    }
   
-  </script>
-  
-  <style>
-  /* 可以在這裡添加任何額外的樣式覆蓋 */
-  /* .el-input__inner {
-     bg-gray-50 border-gray-300;
-  }
-  
-  .el-button--primary {
-     border-none;
-  } */
-  </style>
+</script>
