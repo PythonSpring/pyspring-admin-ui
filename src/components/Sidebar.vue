@@ -14,7 +14,7 @@
             <span>asd</span>
           </el-menu-item>
         </el-menu>
-        <el-button type="primary" class="w-full bg-gray-600 hover:bg-gray-500 border-gray-600 hover:border-gray-500 rounded-none">
+        <el-button @click="$emit('singOut')" type="primary" class="w-full bg-gray-600 hover:bg-gray-500 border-gray-600 hover:border-gray-500 rounded-none">
           <span>登出</span>
         </el-button>
     </el-aside>
@@ -27,11 +27,12 @@
             default: true
         }
     })
+    defineEmits(['singOut'])
 </script>
 
 <style scoped>
     .el-menu-item.is-active {
-    background-color: #4B5563;
+      background-color: #4B5563;
     }
 </style>
     

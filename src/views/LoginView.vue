@@ -1,15 +1,15 @@
 <template>
     <div class="h-screen flex items-center justify-center bg-gray-100">
-        <el-card class="w-1/3 max-w-md h-1/2 flex flex-col justify-around">
+        <el-card class="w-1/3 max-w-md h-1/2 flex flex-col justify-around min-w-[230px]">
             <div class="text-center mb-2">
-                <p class="text-sm text-gray-600 mt-1">請登入您的帳戶</p>
+                <p class="text-gray-600 mt-1">請登入您的帳戶</p>
             </div>
             <el-form :model="form" :rules="rules" ref="loginForm" @submit.prevent="onSubmit" class="space-y-4">
                 <el-form-item prop="email">
                   <el-input 
                   v-model="form.email" 
-                  placeholder="用戶名"
-                  prefix-icon="el-icon-user"
+                  placeholder="信箱"
+                  :prefix-icon="User"
                   class="w-full">
                   </el-input>
                 </el-form-item>
@@ -19,7 +19,7 @@
                     v-model="form.password" 
                     type="password" 
                     placeholder="密碼"
-                    prefix-icon="el-icon-lock"
+                    :prefix-icon="Lock"
                     class="w-full"
                   ></el-input>
                 </el-form-item>
@@ -37,8 +37,12 @@
   
 <script setup>
     import { ref } from 'vue'
+    import { useRouter } from 'vue-router'
     import { ElMessage } from 'element-plus'
     import { login } from '@/composables/apis'
+    import { Lock, User } from '@element-plus/icons-vue'
+
+    const router = useRouter()
 
     const loginForm = ref(null)
     const form = ref({
@@ -48,7 +52,7 @@
   
     const rules = {
       email: [
-        { required: true, message: '請輸入用戶名', trigger: 'blur' }
+        { required: true, message: '請輸入信箱', trigger: 'blur' }
       ],
       password: [
         { required: true, message: '請輸入密碼', trigger: 'blur' }
@@ -56,21 +60,18 @@
     }
   
     const onSubmit = () => {
-      loginForm.value.validate(async(valid) => {
-        if (valid) {
-          try {
+      loginForm.value.validate( async (valid) => {
+        if (!valid) return ElMessage.error('請正確填寫登入信息')
+        try {
+            const message = ElMessage.success('登入成功!')
             const res = await login(form.value)
-            console.log(loginForm.value)
-            console.log(form.value)
-            console.log(res)
-            ElMessage.success('登入成功!')
-          } catch (error) {
-            console.log(error)
-          }
-          
-          // 登入成功後可以進行路由跳轉等操作
-        } else {
-          ElMessage.error('請正確填寫登入信息')
+            if (res.status === 200) message
+            setTimeout(() => {
+              router.push('/') 
+              message.close()
+            }, 1000)
+        } catch (error) {
+          ElMessage.success('登入失敗!')
         }
       })
     }

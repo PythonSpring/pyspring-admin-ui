@@ -1,7 +1,23 @@
 import { GET, POST, PUT, DELETE } from '@/composables/base'
 
-const login = async (data) => {
-    const res = await POST('/public/login', data)
+const checkLoginStatus = async () => {
+    const res = await GET('/public/user')
+    return res
 }
 
-export { login }
+const login = async (data) => {
+    const res = await POST('/public/login', data)
+    return res
+}
+
+const logout = async () => {
+    const res = await GET('/public/logout')
+    return res
+}
+
+const tableNames = async () => {
+    const res = await GET('/private/tables')
+    return res
+}
+
+export { login, logout, checkLoginStatus, tableNames }
