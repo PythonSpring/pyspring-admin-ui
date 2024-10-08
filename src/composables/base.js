@@ -3,6 +3,7 @@ import axios from 'axios';
 const { VITE_APP_BASE_URL } = import.meta.env
 const apiClient = axios.create({
     baseURL: `${VITE_APP_BASE_URL}`,
+    withCredentials: true,
     // timeout: 1000, 
 });
 
