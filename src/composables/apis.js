@@ -20,4 +20,9 @@ const tableNames = async () => {
     return res
 }
 
-export { login, logout, checkLoginStatus, tableNames }
+const modelData = async (name) => {
+    const res = await GET('/private/models')
+    return res
+}
+
+export { login, logout, checkLoginStatus, tableNames, modelData }

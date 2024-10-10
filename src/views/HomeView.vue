@@ -1,7 +1,7 @@
 <template>
     <main>
       <el-container class="h-screen">
-        <Sidebar :sidebarOpen="sidebarOpen" @singOut="singOut"/>
+        <Sidebar :sidebarOpen="sidebarOpen" @singOut="singOut" :sidebarList="sidebarList" @getTableData="getTableData"/>
         <el-container>
           <el-header class="bg-white border-b flex items-center justify-between md:justify-end">
             <el-icon  @click="toggleSidebar" class="text-black block md:hidden cursor-pointer"><Menu /></el-icon>

@@ -7,11 +7,8 @@
           :default-openeds="['1']"
           active-text-color="#ffd04b"
         >
-          <el-menu-item index="1" class="text-white hover:bg-gray-600">
-            <span>qwe</span>
-          </el-menu-item>
-          <el-menu-item index="2" class="text-white hover:bg-gray-600">
-            <span>asd</span>
+          <el-menu-item @click="$emit('getTableData', name)" v-for="(name, index) in sidebarList" :index="(index + 1).toString()" :key="name" class="text-white hover:bg-gray-600">
+            <span>{{ name }}</span>
           </el-menu-item>
         </el-menu>
         <el-button @click="$emit('singOut')" type="primary" class="w-full bg-gray-600 hover:bg-gray-500 border-gray-600 hover:border-gray-500 rounded-none">
@@ -25,9 +22,13 @@
         sidebarOpen: {
             type: Boolean,
             default: true
+        },
+        sidebarList: {
+            type: Array,
+            default: () => []
         }
     })
-    defineEmits(['singOut'])
+    defineEmits(['singOut', 'getTableData'])
 </script>
 
 <style scoped>
