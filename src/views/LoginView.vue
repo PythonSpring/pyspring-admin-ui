@@ -63,9 +63,9 @@
       loginForm.value.validate( async (valid) => {
         if (!valid) return ElMessage.error('請正確填寫登入信息')
         try {
-            const message = ElMessage.success('登入成功!')
             const res = await login(form.value)
-            if (res.status === 200) message
+            if (res.status !== 200) return
+            const message = ElMessage.success('登入成功!')
             setTimeout(() => {
               router.push('/') 
               message.close()

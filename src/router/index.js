@@ -20,16 +20,16 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach(async (to, from, next) => {
-  // const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  // if (!requiresAuth) return next()
-  // try {
-  //   const res = await checkLoginStatus()
-  //   if (res.data.status !== 200) return next('/login')
-  //   next()
-  // } catch (error) {
-  //   next('/login')
-  // }
-// })
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  if (!requiresAuth) return next()
+  try {
+    const res = await checkLoginStatus()
+    if (res.data.status !== 200) return next('/login')
+    next()
+  } catch (error) {
+    next('/login')
+  }
+})
 
 export default router
