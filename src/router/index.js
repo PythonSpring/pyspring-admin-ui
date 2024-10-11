@@ -15,7 +15,12 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      beforeEnter: async (to, from, next) => {
+        const res = await checkLoginStatus()
+        if (res.data.status !== 200) return next()
+        next({ path: '/' })
+    }
     }
   ]
 })
