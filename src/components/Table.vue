@@ -1,13 +1,14 @@
 <template>
     <!-- <el-main class="bg-white"> -->
-    <el-table :data="tableData" class="bg-white rounded-lg shadow w-full text-center">
-        <el-table-column prop="name" label="名稱" />
-        <el-table-column prop="edit" label="編輯">
-            <el-button type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">
+    <el-table v-if="tableHeader.length !== 0" :data="tableData" class="bg-white rounded-lg shadow text-lg">
+        <el-table-column v-for="(col, index) in tableHeader" :prop="col" :label="col" :key="index"/>
+        <el-table-column prop="edit" label="edit">
+            <el-button @click="$emit('getFormData', name)" type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">
                   <el-icon><Edit /></el-icon>
             </el-button>
         </el-table-column>
     </el-table>
+    <p v-else class="text-center text-lg text-gray-500">No data</p>
     <!-- </el-main> -->
 </template>
 
@@ -17,6 +18,11 @@
         tableData: {
             type: Array,
             default: () => []
+        },
+        tableHeader: {
+            type: Array,
+            default: () => []
         }
     })
+    defineEmits(['getFormData'])
 </script>

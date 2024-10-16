@@ -20,8 +20,8 @@ const tableNames = async () => {
     return res
 }
 
-const modelData = async (name) => {
-    const res = await GET('/private/models')
+const modelData = async (tableName) => {
+    const res = await GET(`/private/models/${tableName}`)
     return res
 }
 
