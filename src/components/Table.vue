@@ -3,7 +3,7 @@
     <el-table v-if="tableHeader.length !== 0" :data="tableData" class="bg-white rounded-lg shadow text-lg">
         <el-table-column v-for="(col, index) in tableHeader" :prop="col" :label="col" :key="index"/>
         <el-table-column prop="edit" label="edit">
-            <el-button @click="$emit('getFormData', name)" type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">
+            <el-button @click="$emit('getFormData', name); $emit('openModal')" type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">
                   <el-icon><Edit /></el-icon>
             </el-button>
         </el-table-column>
@@ -24,5 +24,5 @@
             default: () => []
         }
     })
-    defineEmits(['getFormData'])
+    defineEmits(['getFormData', 'openModal'])
 </script>

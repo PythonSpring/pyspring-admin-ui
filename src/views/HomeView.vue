@@ -8,10 +8,10 @@
             <el-button type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">新增</el-button>
           </el-header>
 
-          <Table :tableData="tableData" :tableHeader="tableHeader" @getFormData="getFormData"/>
+          <Table :tableData="tableData" :tableHeader="tableHeader" @getFormData="getFormData" @openModal="openModal"/>
 
         </el-container>
-        <Modal/>
+        <Modal class="z-50" v-if="isVisible" @closeModal="closeModal"/>
       </el-container>
     </main>
 </template>
@@ -28,8 +28,6 @@
   import { logout, tableNames, modelData } from '@/composables/apis'
 
   const router = useRouter()
-
-  
 
   const sidebarOpen = ref(true)
   const toggleSidebar = async () => {
@@ -63,6 +61,14 @@
     } catch (error) {
       // 錯誤處理邏輯可以在這裡添加
     }
+  }
+
+  const isVisible = ref(false)
+  const openModal = () => {
+    isVisible.value = true
+  }
+  const closeModal = () => {
+    isVisible.value = false
   }
 
   const getFormData = async () => {
