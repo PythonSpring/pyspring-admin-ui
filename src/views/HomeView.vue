@@ -8,10 +8,10 @@
             <el-button type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">新增</el-button>
           </el-header>
 
-          <Table :tableData="tableData" :tableHeader="tableHeader" @getFormData="getFormData" @openModal="openModal"/>
+          <Table :tableData="tableData" :tableHeader="tableHeader" @openModal="openModal" :tableTitle="tableTitle"/>
 
         </el-container>
-        <Modal class="z-50" v-if="isVisible" @closeModal="closeModal"/>
+        <Modal class="z-50" v-if="isVisible" @closeModal="closeModal" :formColumns="formColumns"/>
       </el-container>
     </main>
 </template>
@@ -52,11 +52,15 @@
   }
   const tableData = ref([])
   const tableHeader = ref([])
+  const formColumns = ref([])
+  const tableTitle = ref('')
   const getTableData = async (name) => {
     try {
       const res = await modelData(name)
+      tableTitle.value = name
       if(res.data.rows.length === 0) return tableHeader.value = []
       tableData.value = res.data.rows
+      formColumns.value = res.data.columns
       tableHeader.value = Object.keys(res.data.rows[0])
     } catch (error) {
       // 錯誤處理邏輯可以在這裡添加
@@ -71,16 +75,15 @@
     isVisible.value = false
   }
 
-  const getFormData = async () => {
-    console.log('hello')
-  }
 
   onBeforeMount( async () => {
     try {
       const tableNamesRes = await tableNames()
       sidebarList.value = tableNamesRes.data
       const modelDataRes = await modelData(tableNamesRes.data[0])
+      tableTitle.value = modelDataRes.data.table_name
       tableData.value = modelDataRes.data.rows
+      formColumns.value = modelDataRes.data.columns
       tableHeader.value = Object.keys(modelDataRes.data.rows[0])
     } catch (error) {
       // 錯誤處理邏輯可以在這裡添加
