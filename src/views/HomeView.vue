@@ -1,11 +1,11 @@
 <template>
     <main>
-      <el-container class="h-screen">
-        <Sidebar :sidebarOpen="sidebarOpen" @singOut="singOut" :sidebarList="sidebarList" @getTableData="getTableData"/>
+      <el-container class="h-screen relative">
+        <Sidebar :class="{ 'hidden': sidebarOpen, 'z-50 fixed inset-y-0 left-0': !sidebarOpen}" @singOut="singOut" :sidebarList="sidebarList" @getTableData="getTableData"/>
         <el-container>
-          <el-header class="bg-white border-b flex items-center justify-between md:justify-end">
-            <el-icon  @click="toggleSidebar" class="text-black block md:hidden cursor-pointer"><Menu /></el-icon>
-            <el-button type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">新增</el-button>
+          <el-header class="bg-white border-b flex items-center justify-between md:justify-end" >
+            <el-icon   @click="toggleSidebar" class="text-black block md:hidden cursor-pointer" :class="{'fixed left-32 z-50 text-white': !sidebarOpen}"><Menu /></el-icon>
+            <el-button type="primary" :class="{'fixed right-5' : !sidebarOpen}" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">新增</el-button>
           </el-header>
 
           <Table :tableData="tableData" :tableHeader="tableHeader" @openModal="openModal" :tableTitle="tableTitle"/>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-  import { ref, nextTick, onBeforeMount } from 'vue'
+  import { ref, onBeforeMount } from 'vue'
   import { useRouter } from 'vue-router'
   import { Menu } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
@@ -32,7 +32,6 @@
   const sidebarOpen = ref(true)
   const toggleSidebar = async () => {
     sidebarOpen.value = !sidebarOpen.value
-    // await nextTick()
   }
 
   const sidebarList = ref([])

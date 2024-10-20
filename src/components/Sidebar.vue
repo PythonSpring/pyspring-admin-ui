@@ -1,5 +1,5 @@
 <template>
-    <el-aside class="md:flex bg-gray-800 text-white w-40 flex flex-col"  :class="{ 'hidden': sidebarOpen}">
+    <el-aside class="md:flex bg-gray-800 text-white w-40 flex flex-col">
         <div class="p-4 text-xl font-bold">使用者</div>
         <el-menu
           default-active="1"
@@ -19,10 +19,6 @@
 
 <script setup>
     defineProps({
-        sidebarOpen: {
-            type: Boolean,
-            default: true
-        },
         sidebarList: {
             type: Array,
             default: () => []
