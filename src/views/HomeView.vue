@@ -1,6 +1,6 @@
 <template>
     <main>
-      <el-container class="h-screen relative">
+      <el-container class="h-screen">
         <Sidebar :class="{ 'hidden': sidebarOpen, 'z-50 fixed inset-y-0 left-0': !sidebarOpen}" @singOut="singOut" :sidebarList="sidebarList" @getTableData="getTableData"/>
         <el-container>
           <el-header class="bg-white border-b flex items-center justify-between md:justify-end" >
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-  import { ref, onBeforeMount } from 'vue'
+  import { ref, onBeforeMount, watch, onBeforeUnmount, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { Menu } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
@@ -33,9 +33,9 @@
   const toggleSidebar = async () => {
     sidebarOpen.value = !sidebarOpen.value
   }
-
+  
   const sidebarList = ref([])
-
+  
   const singOut = async () =>{
     try {
       const res = await logout()
@@ -65,7 +65,7 @@
       // 錯誤處理邏輯可以在這裡添加
     }
   }
-
+  
   const isVisible = ref(false)
   const openModal = () => {
     isVisible.value = true
@@ -73,8 +73,23 @@
   const closeModal = () => {
     isVisible.value = false
   }
+  
+  const isMdScreen = ref(window.innerWidth)
+  watch(isMdScreen, (nV) => {
+    if (nV >= 768) sidebarOpen.value = true
+  })
+  
+  const updateScreenSize = () => {
+    isMdScreen.value = window.innerWidth
+  }
+  onMounted(() => {
+      window.addEventListener('resize', updateScreenSize)
+  })
 
-
+  onBeforeUnmount(() => {
+      window.removeEventListener('resize', updateScreenSize)
+  })
+  
   onBeforeMount( async () => {
     try {
       const tableNamesRes = await tableNames()
