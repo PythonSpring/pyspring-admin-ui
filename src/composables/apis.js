@@ -25,4 +25,25 @@ const modelData = async (tableName) => {
     return res
 }
 
-export { login, logout, checkLoginStatus, tableNames, modelData }
+const addModelData = async (tableName, data) => {
+    const res = await POST(`/private/models/${tableName}`, {data})
+    return res
+}
+
+const deleteModel = async (tableName, data) => {
+    const res = await DELETE(`/private/models/${tableName}`, data)
+    return res
+}
+
+const updateModel = async (tableName, data) => {
+    const res = await PUT(`/private/models/${tableName}`, data)
+    return res
+}
+
+const enumChoices = async (tableName, columName) => {
+    const res = await GET(`/private/models/enum_choices/${tableName}/${columName}`)
+    return res
+}
+
+
+export { login, logout, checkLoginStatus, tableNames, modelData, addModelData, deleteModel, updateModel, enumChoices }

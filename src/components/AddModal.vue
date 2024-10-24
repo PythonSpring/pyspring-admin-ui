@@ -1,7 +1,9 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        
-        <div class="bg-white rounded-lg p-6 w-2/3 lg:w-1/3">
+        <div v-if="loadingAddModal" class="absolute inset-0 flex justify-center items-center z-10">
+            <img src="/loading.gif" alt="loading" class="w-20 h-20">
+        </div>
+        <div class="bg-white rounded-lg p-6 w-2/3 lg:w-1/3 max-h-[600px] overflow-y-auto">
             <div class="flex justify-end">
                 <el-button  @click="$emit('closeAddModal')" type="primary" native-type="button" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600 font-bold p-2">
                     x
@@ -43,27 +45,29 @@
         tableTitle: {
             type: String,
             default: () => ''
+        },
+        loadingAddModal:{
+            type: Boolean,
+            default: () => false
         }
     })
-    defineEmits(['closeAddModal'])
+    const emit = defineEmits(['closeAddModal', 'submitForm'])
 
     const formRef = ref(null)
     const form = ref({})
     const rules = ref({})
-
     props.formColumns.forEach(column => {
-        form.value[column.field] = ''
-        rules.value[column.field] = [{ required: true, message: `請輸入${column.header}`, trigger: 'blur' }]
+        if(column.field !== 'id'){
+            form.value[column.field] = ''
+            rules.value[column.field] = [{ required: true, message: `請輸入${column.header}`, trigger: 'blur' }]
+        }
     })
 
 
     const submitForm = () => {
-        console.log(form.value)
         formRef.value.validate( async (valid) => {
-        if (!valid) return ElMessage.error('請正確填寫表單')
-        try {
-        } catch (error) {
-        }
-      })
+            if (!valid) return ElMessage.error('請正確填寫表單')
+            emit('submitForm', form.value)
+        })
     }
 </script>

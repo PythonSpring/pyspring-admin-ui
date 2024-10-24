@@ -13,7 +13,7 @@
         </el-container>
         <EditModal class="z-50" v-if="EditIsVisible" @closeEditModal="closeEditModal" :formColumns="formColumns" :selectedRow="selectedRow"/>
 
-        <AddModal class="z-50" v-if="AddIsVisible" @closeAddModal="closeAddModal" :formColumns="formColumns" :tableTitle="tableTitle"/>
+        <AddModal class="z-50" v-if="AddIsVisible" @closeAddModal="closeAddModal" :formColumns="formColumns" :tableTitle="tableTitle" @submitForm="submitForm" :loadingAddModal="loadingAddModal"/>
       </el-container>
     </main>
 </template>
@@ -28,7 +28,7 @@
   import EditModal from '@/components/EditModal.vue'
   import AddModal from '@/components/AddModal.vue'
 
-  import { logout, tableNames, modelData } from '@/composables/apis'
+  import { logout, tableNames, modelData, addModelData } from '@/composables/apis'
 
   const router = useRouter()
 
@@ -61,7 +61,7 @@
     try {
       const res = await modelData(name)
       tableTitle.value = name
-      formColumns.value = res.data.columns
+      formColumns.value = res.data.columns.filter((col)=> col.field !== "id")
       if(res.data.rows.length === 0) return tableHeader.value = []
       tableData.value = res.data.rows
       tableHeader.value = Object.keys(res.data.rows[0])
@@ -111,10 +111,32 @@
       const modelDataRes = await modelData(tableNamesRes.data[0])
       tableTitle.value = modelDataRes.data.table_name
       tableData.value = modelDataRes.data.rows
-      formColumns.value = modelDataRes.data.columns
+      formColumns.value = modelDataRes.data.columns.filter((col)=> col.field !== "id")
       tableHeader.value = Object.keys(modelDataRes.data.rows[0])
     } catch (error) {
       // 錯誤處理邏輯可以在這裡添加
     }
   })
+
+
+  const loadingAddModal = ref(false)
+  const submitForm = async (formData) => {
+    loadingAddModal.value = true
+    console.log(Object.entries(formData))
+    const formattedData = Object.entries(formData).map(([key, value]) => ({
+        key: key,
+        value: value
+    }))
+    console.log(formattedData)
+    try {
+      const res = await addModelData(tableTitle.value, formattedData)
+      loadingAddModal.value = false
+      ElMessage.success('新增成功!')
+      AddIsVisible.value = false
+      await getTableData(tableTitle.value)
+    } catch (error) {
+      ElMessage.success('新增失敗!')
+      loadingAddModal.value = false
+    }
+  }
 </script>

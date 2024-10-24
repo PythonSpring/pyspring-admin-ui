@@ -1,6 +1,6 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div class="bg-white rounded-lg p-6 w-2/3 lg:w-1/3">
+        <div class="bg-white rounded-lg p-6 w-2/3 lg:w-1/3  max-h-[600px] overflow-y-auto">
             <div class="flex justify-end">
                 <el-button  @click="$emit('closeEditModal')" type="primary" native-type="button" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600 font-bold p-2">
                     x
@@ -44,7 +44,7 @@
         }
     })
     defineEmits(['closeEditModal'])
-    
+
     const formRef = ref(null)
     const form = ref({})
     const rules = ref({})
