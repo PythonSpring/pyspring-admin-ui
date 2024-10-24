@@ -3,10 +3,12 @@
     <el-main class="bg-white">
     <el-table v-if="tableHeader.length !== 0" :data="tableData" class="bg-white rounded-lg shadow text-lg">
         <el-table-column v-for="(col, index) in tableHeader" :prop="col" :label="col" :key="index"/>
-        <el-table-column prop="edit" label="edit">
-            <el-button @click="$emit('openModal')" type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">
-                  <el-icon><Edit /></el-icon>
-            </el-button>
+        <el-table-column label="edit">
+            <template v-slot="scope">
+                <el-button @click="$emit('openEditModal', scope.row)" type="primary" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">
+                      <el-icon><Edit /></el-icon>
+                </el-button>
+            </template>
         </el-table-column>
     </el-table>
     <p v-else class="text-center text-lg text-gray-500">No data</p>
@@ -29,5 +31,5 @@
             default: () => ''
         }
     })
-    defineEmits(['openModal'])
+    defineEmits(['openEditModal'])
 </script>

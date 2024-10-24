@@ -5,13 +5,15 @@
         <el-container>
           <el-header class="bg-white border-b flex items-center justify-between md:justify-end" >
             <el-icon   @click="toggleSidebar" class="text-black block md:hidden cursor-pointer" :class="{'fixed left-32 z-50 text-white': !sidebarOpen}"><Menu /></el-icon>
-            <el-button type="primary" :class="{'fixed right-5' : !sidebarOpen}" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">新增</el-button>
+            <el-button @click="openAddModal" type="primary" :class="{'fixed right-5' : !sidebarOpen}" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">新增</el-button>
           </el-header>
 
-          <Table :tableData="tableData" :tableHeader="tableHeader" @openModal="openModal" :tableTitle="tableTitle"/>
+          <Table :tableData="tableData" :tableHeader="tableHeader" @openEditModal="openEditModal" :tableTitle="tableTitle"/>
 
         </el-container>
-        <Modal class="z-50" v-if="isVisible" @closeModal="closeModal" :formColumns="formColumns"/>
+        <EditModal class="z-50" v-if="EditIsVisible" @closeEditModal="closeEditModal" :formColumns="formColumns" :selectedRow="selectedRow"/>
+
+        <AddModal class="z-50" v-if="AddIsVisible" @closeAddModal="closeAddModal" :formColumns="formColumns" :tableTitle="tableTitle"/>
       </el-container>
     </main>
 </template>
@@ -23,7 +25,8 @@
   import { ElMessage } from 'element-plus'
   import Sidebar from '@/components/Sidebar.vue'
   import Table from '@/components/Table.vue'
-  import Modal from '@/components/Modal.vue'
+  import EditModal from '@/components/EditModal.vue'
+  import AddModal from '@/components/AddModal.vue'
 
   import { logout, tableNames, modelData } from '@/composables/apis'
 
@@ -54,26 +57,37 @@
   const formColumns = ref([])
   const tableTitle = ref('')
   const getTableData = async (name) => {
+    console.log(name)
     try {
       const res = await modelData(name)
       tableTitle.value = name
+      formColumns.value = res.data.columns
       if(res.data.rows.length === 0) return tableHeader.value = []
       tableData.value = res.data.rows
-      formColumns.value = res.data.columns
       tableHeader.value = Object.keys(res.data.rows[0])
     } catch (error) {
       // 錯誤處理邏輯可以在這裡添加
     }
   }
   
-  const isVisible = ref(false)
-  const openModal = () => {
-    isVisible.value = true
+  const EditIsVisible = ref(false)
+  const selectedRow = ref({})
+  const openEditModal = (row) => {
+    selectedRow.value = row
+    EditIsVisible.value = true
   }
-  const closeModal = () => {
-    isVisible.value = false
+  const closeEditModal = () => {
+    EditIsVisible.value = false
   }
-  
+
+  const AddIsVisible = ref(false)
+  const openAddModal = () => {
+    AddIsVisible.value = true
+  }
+  const closeAddModal = () => {
+    AddIsVisible.value = false
+  }
+
   const isMdScreen = ref(window.innerWidth)
   watch(isMdScreen, (nV) => {
     if (nV >= 768) sidebarOpen.value = true
