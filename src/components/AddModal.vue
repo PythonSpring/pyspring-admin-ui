@@ -18,7 +18,28 @@
                     :prop="column.field"
                     label-position="top"
                 >
-                    <el-input v-model="form[column.field]"></el-input>
+                    <template v-if="column.is_enum">
+                        <el-select v-model="form[column.field]">
+                            <el-option 
+                                v-for="option in column.options" 
+                                :key="option.value" 
+                                :label="option.label" 
+                                :value="option.value">
+                            </el-option>
+                        </el-select>
+                    </template>
+                    <template v-else-if="column.builtin_type === 'bool'">
+                        <el-radio-group v-model="form[column.field]">
+                            <el-radio :value="true">True</el-radio>
+                            <el-radio :value="false">False</el-radio>
+                        </el-radio-group>
+                    </template>
+                    <template v-else>
+                        <el-input 
+                            v-model="form[column.field]" 
+                            :type="getInputType(column.builtin_type)">
+                        </el-input>
+                    </template>
                 </el-form-item>
 
                 <div class="flex justify-end">
@@ -62,6 +83,27 @@
             rules.value[column.field] = [{ required: true, message: `請輸入${column.header}`, trigger: 'blur' }]
         }
     })
+
+    const getInputType = (builtinType) => {
+        switch (builtinType) {
+            case 'str':
+                return 'text'
+            case 'EmailStr':
+                return 'email'
+            case 'int':
+                return 'number'
+            case 'bool':
+                return 'checkbox'
+            case 'Decimal':
+                return 'number'
+            case 'date':
+                return 'date'
+            case 'datetime':
+                return 'datetime-local'
+            default:
+                return 'text'
+        }
+    }
 
 
     const submitForm = () => {
