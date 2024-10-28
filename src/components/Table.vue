@@ -1,6 +1,6 @@
 <template>
     <h2 class="text-center font-bold text-3xl p-2 text-gray-500 mb-4">{{ tableTitle }}</h2>
-        <el-table ref="multipleTableRef" border  v-if="tableHeader.length !== 0" :data="tableData" class="bg-white rounded-lg shadow text-lg"  style="width: 96%" @selection-change="handleSelectionChange">
+        <el-table border v-if="tableHeader.length !== 0" :data="tableData" class="bg-white rounded-lg shadow text-lg"  style="width: 96%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40" />
             <el-table-column v-for="(col, index) in tableHeader" :prop="col" :label="col" :key="index"  :min-width="142" />
             <el-table-column label="edit">
@@ -16,7 +16,6 @@
 
 <script setup>
 
-    import { ref } from 'vue'
     import { Edit } from '@element-plus/icons-vue'
     defineProps({
         tableData: {
@@ -27,17 +26,20 @@
             type: Array,
             default: () => []
         },
-        tableTitle:{
+        tableTitle: {
             type: String,
             default: () => ''
+        },
+        multipleSelection: {
+            type: Array,
+            default: () => []
         }
     })
-    defineEmits(['openEditModal'])
 
-    const multipleTableRef = ref()
-    const multipleSelection = ref([])
+    const emit = defineEmits(['openEditModal', 'handleSelectionChange'])
+
     const handleSelectionChange = (val) => {
-        multipleSelection.value = val
+        emit('handleSelectionChange', val)
     }
 
 </script>

@@ -10,7 +10,7 @@
                 </el-button>
             </div>
             <p class="text-center text-3xl text-gray-500">{{ tableTitle }}</p>
-            <el-form :model="form" :rules="rules" ref="formRef" @submit.prevent="submitForm" class="mt-6" hide-required-asterisk>
+            <el-form :model="form" :rules="rules" ref="formRef" @submit.prevent="submitAddForm" class="mt-6" hide-required-asterisk>
                 <el-form-item 
                     v-for="(column, index) in formColumns"
                     :key="column.field"
@@ -72,7 +72,7 @@
             default: () => false
         }
     })
-    const emit = defineEmits(['closeAddModal', 'submitForm'])
+    const emit = defineEmits(['closeAddModal', 'submitAddForm'])
 
     const formRef = ref(null)
     const form = ref({})
@@ -106,10 +106,10 @@
     }
 
 
-    const submitForm = () => {
+    const submitAddForm = () => {
         formRef.value.validate( async (valid) => {
             if (!valid) return ElMessage.error('請正確填寫表單')
-            emit('submitForm', form.value)
+            emit('submitAddForm', form.value)
         })
     }
 </script>
