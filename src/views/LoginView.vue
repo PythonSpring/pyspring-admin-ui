@@ -17,11 +17,18 @@
                 <el-form-item prop="password">
                   <el-input 
                     v-model="form.password" 
-                    type="password" 
+                    :type="showPassword ? 'text' : 'password'" 
                     placeholder="密碼"
                     :prefix-icon="Lock"
-                    class="w-full"
+                    class="w-full relative"
                   ></el-input>
+                  <el-icon 
+                      class="absolute right-2 top-2 cursor-pointer"
+                      @click="togglePassword"
+                  >
+                      <View v-if="!showPassword" />
+                      <Hide v-else />
+                  </el-icon>
                 </el-form-item>
           
                 <el-form-item>
@@ -40,9 +47,15 @@
     import { useRouter } from 'vue-router'
     import { ElMessage } from 'element-plus'
     import { login } from '@/composables/apis'
-    import { Lock, User } from '@element-plus/icons-vue'
+    import { Lock, User, View, Hide } from '@element-plus/icons-vue'
 
     const router = useRouter()
+
+    const showPassword = ref(false)
+
+    const togglePassword = () => {
+        showPassword.value = !showPassword.value
+    }
 
     const loginForm = ref(null)
     const form = ref({

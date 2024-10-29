@@ -37,8 +37,17 @@
                     <template v-else>
                         <el-input 
                             v-model="form[column.field]" 
-                            :type="getInputType(column.builtin_type)">
+                            :type="column.field === 'password' ? (showPassword ? 'text' : 'password') : getInputType(column)"
+                            class="relative">
                         </el-input>
+                        <el-icon 
+                            v-if="column.field === 'password'" 
+                            class="absolute right-2 top-2 cursor-pointer"
+                            @click="togglePassword"
+                        >
+                            <View v-if="!showPassword" />
+                            <Hide v-else />
+                        </el-icon>
                     </template>
                 </el-form-item>
 
@@ -57,6 +66,7 @@
 <script setup>
     import { ref } from 'vue'
     import { ElMessage } from 'element-plus'
+    import { View, Hide } from '@element-plus/icons-vue'
 
     const props = defineProps({
         formColumns: {
@@ -84,8 +94,8 @@
         }
     })
 
-    const getInputType = (builtinType) => {
-        switch (builtinType) {
+    const getInputType = (column) => {
+        switch (column.builtin_type) {
             case 'str':
                 return 'text'
             case 'EmailStr':
@@ -105,6 +115,11 @@
         }
     }
 
+    const showPassword = ref(false)
+
+    const togglePassword = () => {
+        showPassword.value = !showPassword.value
+    }
 
     const submitAddForm = () => {
         formRef.value.validate( async (valid) => {
