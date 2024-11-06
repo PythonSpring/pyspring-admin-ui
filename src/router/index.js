@@ -20,7 +20,17 @@ const router = createRouter({
         const res = await checkLoginStatus()
         if (res.data.status !== 200) return next()
         next({ path: '/' })
-    }
+      }
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue'),
+      beforeEnter: async (to, from, next) => {
+        const res = await checkLoginStatus()
+        if (res.data.status !== 200) return next()
+        next({ path: '/' })
+      }
     }
   ]
 })

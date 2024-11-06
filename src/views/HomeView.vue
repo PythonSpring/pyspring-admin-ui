@@ -56,10 +56,13 @@
     try {
       const res = await logout()
       if(res.status !== 200) return
-      const message = ElMessage.success('登出成功!')
+      ElMessage.success({
+        message: '登出成功!',
+        type: 'success',
+        duration: 1000
+      })
       setTimeout(() => {
         router.push('login') 
-        message.close()
       }, 1000)
     } catch (error) {
       ElMessage.success('登出失敗!')
@@ -185,12 +188,12 @@
     try {
       const res = await updateModel(tableTitle.value, formattedData)
       loadingUpdateModal.value = false
-      ElMessage.success('新增成功!')
+      ElMessage.success('更新成功!')
       AddIsVisible.value = false
       await getTableData(tableTitle.value)
     } catch (error) {
       console.log(error)
-      ElMessage.success('新增失敗!')
+      ElMessage.success('更新失敗!')
       loadingUpdateModal.value = false
     }
   }

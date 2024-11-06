@@ -5,6 +5,11 @@ const checkLoginStatus = async () => {
     return res
 }
 
+const register = async (data) => {
+    const res = await POST('/public/register', data)
+    return res
+}
+
 const login = async (data) => {
     const res = await POST('/public/login', data)
     return res
@@ -46,4 +51,4 @@ const enumChoices = async (tableName, columName) => {
 }
 
 
-export { login, logout, checkLoginStatus, tableNames, modelData, addModelData, deleteModel, updateModel, enumChoices }
+export { login, logout, checkLoginStatus, tableNames, modelData, addModelData, deleteModel, updateModel, enumChoices, register }
