@@ -1,8 +1,8 @@
 <template>
-    <div class="h-screen flex items-center justify-center bg-gray-100">
+    <div :class="[getThemeClasses('container'), 'h-screen flex items-center justify-center']">
         <el-card class="w-1/3 max-w-md h-1/2 flex flex-col justify-around min-w-[230px]">
             <div class="text-center mb-2">
-                <p class="text-gray-600 mt-1">請登入您的帳戶</p>
+                <p :class="[getThemeClasses('text'), 'mt-1']">請登入您的帳戶</p>
             </div>
             <el-form @keyup.enter="onSubmit" :model="form" :rules="rules" ref="loginForm"  class="space-y-4">
                 <el-form-item prop="email">
@@ -30,7 +30,7 @@
                       <Hide v-else />
                   </el-icon>
                 </el-form-item>
-                <p class="text-end text-xs text-blue-500 cursor-pointer">忘記密碼？</p>
+                <p :class="[getThemeClasses('link'), 'text-end text-xs cursor-pointer']">忘記密碼？</p>
           
                 <div class="flex justify-between items-center">
                   <el-button @click="router.push('register')" type="primary" native-type="button" class="w-full bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600">
@@ -51,8 +51,12 @@
     import { useRouter } from 'vue-router'
     import { ElMessage } from 'element-plus'
     import { login } from '@/composables/apis'
+    import { useDarkMode } from '@/composables/useDarkMode'
     import { Lock, Box, View, Hide } from '@element-plus/icons-vue'
 
+    const { getThemeClasses } = useDarkMode()
+
+    
     const router = useRouter()
 
     const showPassword = ref(false)

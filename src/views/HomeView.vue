@@ -5,8 +5,12 @@
         <Sidebar :class="{ 'hidden': sidebarOpen, 'z-50 fixed inset-y-0 left-0': !sidebarOpen }" @singOut="singOut" :sidebarList="sidebarList" @getTableData="getTableData"/>
 
         <el-container class="h-[91%]">
-          <el-header class="bg-white border-b flex items-center justify-between md:justify-end" >
-            <el-icon   @click="toggleSidebar" class="text-black block md:hidden cursor-pointer" :class="{ 'fixed left-32 z-50 text-white': !sidebarOpen }">
+          <el-header :class="[getThemeClasses('default'), ' dark:border-gray-700 border-b flex items-center justify-between md:justify-end']">
+            <el-icon   @click="toggleSidebar" :class="[
+              'block md:hidden cursor-pointer',
+              getThemeClasses('text'),
+              { 'fixed left-32 z-50 text-white': !sidebarOpen }
+            ]">
               <Menu />
             </el-icon>
             <div>
@@ -42,8 +46,11 @@
   import AddModal from '@/components/AddModal.vue'
 
   import { logout, tableNames, modelData, addModelData, enumChoices, updateModel, deleteModel } from '@/composables/apis'
+  import { useDarkMode } from '@/composables/useDarkMode'
+  
 
   const router = useRouter()
+  const { getThemeClasses } = useDarkMode()
 
   const sidebarOpen = ref(true)
   const toggleSidebar = async () => {

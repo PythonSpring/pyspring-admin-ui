@@ -3,7 +3,7 @@
         <div v-if="loadingAddModal" class="absolute inset-0 flex justify-center items-center z-10">
             <img src="/loading.gif" alt="loading" class="w-20 h-20">
         </div>
-        <div class="bg-white rounded-lg p-6 w-2/3 lg:w-1/3 max-h-[600px] overflow-y-auto">
+        <div :class="[getThemeClasses('default'), 'rounded-lg p-6 w-2/3 lg:w-1/3 max-h-[600px] overflow-y-auto border-gray-500 border']">
             <div class="flex justify-end">
                 <el-button  @click="$emit('closeAddModal')" type="primary" native-type="button" class="bg-gray-500 hover:bg-gray-600 border-gray-500 hover:border-gray-600 font-bold p-2">
                     x
@@ -67,6 +67,9 @@
     import { ref } from 'vue'
     import { ElMessage } from 'element-plus'
     import { View, Hide } from '@element-plus/icons-vue'
+    import { useDarkMode } from '@/composables/useDarkMode'
+
+    const { getThemeClasses } = useDarkMode()
 
     const props = defineProps({
         formColumns: {

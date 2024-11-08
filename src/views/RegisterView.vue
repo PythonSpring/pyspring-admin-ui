@@ -1,8 +1,8 @@
 <template>
-    <div class="h-screen flex items-center justify-center bg-gray-100">
+    <div :class="[getThemeClasses('container'), 'h-screen flex items-center justify-center']">
         <el-card class="w-1/3 max-w-md h-1/2 flex flex-col justify-around min-w-[230px]">
             <div class="text-center mb-2">
-                <p class="text-gray-600 mt-1">註冊</p>
+                <p :class="[getThemeClasses('text'), 'mt-1']">註冊</p>
             </div>
             <el-form :model="form" :rules="rules" ref="loginForm"  class="space-y-4 overflow-y-auto">
                 <el-form-item prop="user_name">
@@ -67,10 +67,12 @@
     import { ref } from 'vue'
     import { useRouter } from 'vue-router'
     import { ElMessage } from 'element-plus'
-    import { register, login } from '@/composables/apis'
+    import { register } from '@/composables/apis'
+    import { useDarkMode } from '@/composables/useDarkMode'
     import { Lock, User, Box, View, Hide } from '@element-plus/icons-vue'
 
     const router = useRouter()
+    const { getThemeClasses } = useDarkMode()
 
     const showPassword = ref(false)
 

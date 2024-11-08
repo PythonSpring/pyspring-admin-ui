@@ -1,6 +1,6 @@
 <template>
     <h2 class="text-center font-bold text-3xl p-2 text-gray-500 mb-4">{{ tableTitle }}</h2>
-        <el-table border v-if="tableHeader.length !== 0" :data="tableData" class="bg-white rounded-lg shadow text-lg"  style="width: 96%" @selection-change="handleSelectionChange">
+        <el-table border v-if="tableHeader.length !== 0" :data="tableData" class="rounded-lg shadow text-lg"  style="width: 96%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40" />
             <el-table-column v-for="(col, index) in tableHeader" :prop="col" :label="col" :key="index"  :min-width="142" />
             <el-table-column label="edit">

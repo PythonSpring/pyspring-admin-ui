@@ -1,9 +1,9 @@
 <template>
-    <el-aside class="md:flex bg-gray-800 text-white w-40 flex flex-col">
+    <el-aside :class="[getThemeClasses('sidebar'), 'md:flex text-white w-40 flex flex-col']">
         <div class="p-4 text-xl font-bold">使用者</div>
         <el-menu
           default-active="1"
-          class="bg-gray-800 text-white border-r-0 flex-1"
+          :class="[getThemeClasses('sidebar'), ' text-white border-r-0 flex-1']"
           :default-openeds="['1']"
           active-text-color="#ffd04b"
         >
@@ -18,18 +18,21 @@
 </template>
 
 <script setup>
-    defineProps({
-        sidebarList: {
-            type: Array,
-            default: () => []
-        }
-    })
-    defineEmits(['singOut', 'getTableData'])
+  import { useDarkMode } from '@/composables/useDarkMode'
+  const { getThemeClasses } = useDarkMode()
+
+  defineProps({
+      sidebarList: {
+          type: Array,
+          default: () => []
+      }
+  })
+  defineEmits(['singOut', 'getTableData'])
 </script>
 
 <style scoped>
-    .el-menu-item.is-active {
-      background-color: #4B5563;
-    }
+  .el-menu-item.is-active {
+    background-color: #4B5563;
+  }
 </style>
     
